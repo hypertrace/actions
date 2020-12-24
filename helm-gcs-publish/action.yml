@@ -3,7 +3,7 @@ description: 'Published helm charts to GCS'
 runs:
   using: "composite"
   steps: 
-      run: |
+    - run: |
           CHART_VERSION=$(echo ${GITHUB_REF} | cut -d/ -f 3)
           CHART_NAME=$(awk '/^name:/ {print $2}' ./helm/Chart.yaml)
           export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/helm-gcs-key.json
