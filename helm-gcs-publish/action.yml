@@ -1,15 +1,27 @@
 name: 'Helm GCS Publish'
 description: 'Published helm charts to GCS'
+inputs:
+  chart-path:
+    description: 'Path to helm chart directory'
+    required: true
+    default: './helm'
+  helm-gcs-repository: # Replaces $HELM_GCS_REPOSITORY env var. Assumes only one or other is set
+    description: 'Helm repository GCS URL'
+    required: false
+  helm-gcs-credentials: # Replaces $HELM_GCS_CREDENTIALS env var. Assumes only one or other is set
+    description: 'Credentials for writing to Helm repository'
+    required: false
 runs:
   using: "composite"
   steps: 
     - run: |
           CHART_VERSION=$(echo ${GITHUB_REF} | cut -d/ -f 3)
-          CHART_NAME=$(awk '/^name:/ {print $2}' ./helm/Chart.yaml)
+          CHART_NAME=$(awk '/^name:/ {print $2}' ${{ inputs.chart-path}}/Chart.yaml)
           export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/helm-gcs-key.json
-          echo $HELM_GCS_CREDENTIALS > ${GOOGLE_APPLICATION_CREDENTIALS}
-          helm dependency update ./helm/
-          helm repo add helm-gcs $HELM_GCS_REPOSITORY
-          helm package --version ${CHART_VERSION} --app-version ${CHART_VERSION} ./helm/
+          echo ${HELM_GCS_CREDENTIALS}${{ inputs.helm-gcs-credentials }} > ${GOOGLE_APPLICATION_CREDENTIALS}
+          helm dependency update ${{ inputs.chart-path }}
+          TEMP_REPO=${HELM_GCS_REPOSITORY}${{ inputs.helm-gcs-repository }}
+          helm repo add helm-gcs $TEMP_REPO
+          helm package --version ${CHART_VERSION} --app-version ${CHART_VERSION} ${{ inputs.chart-path }}
           helm gcs push ${CHART_NAME}-${CHART_VERSION}.tgz helm-gcs --public --retry
       shell: sh
