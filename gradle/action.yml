@@ -7,4 +7,4 @@ runs:
   steps: 
     - run: |
           ./gradlew ${{ inputs.args }} --info --max-workers=2 -Dorg.gradle.jvmargs=-Xmx2g -Dorg.gradle.console=plain --continue
-      shell: bash
+      shell: sh
