@@ -1,9 +1,6 @@
 name: 'Helm GCS Publish'
 description: 'Published helm charts to GCS'
 inputs:
-  role-name: 
-    description: 'we want to publish or validate charts'
-    required: true
   chart-path:
     description: 'Path to helm chart directory'
     required: true
@@ -18,5 +15,5 @@ runs:
   using: 'docker'
   image: '../dockerfile'
   args: 
-    - ${{ inputs.role-name }}
+    - publish
     - ${{ inputs.chart-path }}
