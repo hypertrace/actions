@@ -46,4 +46,4 @@ jobs:
       - name: Validate GitHub Actions workflows
         run: |
           ajv -s "${{ env.JSON_SCHEMA_FOLDER }}/${{ env.JSON_SCHEMA_FILENAME }}" -d "./.github/workflows/*.{yml,yaml}"
-          ajv -s "${{ env.JSON_SCHEMA_FOLDER }}/${{ env.JSON_SCHEMA_FILENAME }}" -d "./**/*.{yml,yaml}"
+          ajv -s "${{ env.JSON_SCHEMA_FOLDER }}/${{ env.JSON_SCHEMA_FILENAME }}" -d "./checksum/*.{yml,yaml}"
