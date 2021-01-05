@@ -3,11 +3,9 @@ name: Validate GitHub Actions Workflows
 on:
   pull_request:
     paths:
-      - ".github/workflows/*.ya?ml"
       - "**/*.ya?ml"
   push:
     paths:
-      - ".github/workflows/*.ya?ml"
       - "**/*.ya?ml"
   # Scheduled trigger to catch workflow failure resulting from changes to the JSON schema
   schedule:
@@ -32,5 +30,4 @@ jobs:
       # See: https://github.com/ajv-validator/ajv-cli/blob/master/README.md
       - name: Validate GitHub Actions workflows
         run: |
-          ajv -s "./.github/schemas/github-action.json" -d "./.github/workflows/*.{yml,yaml}"
           ajv -s "./.github/schemas/github-action.json" -d "**/*.{yml,yaml}"
