@@ -9,8 +9,8 @@ if [ $1 == "validate" ]; then
 elif [ $1 == "publish" ]; then
     CHART_VERSION=$(echo ${GITHUB_REF} | cut -d/ -f 3)
     CHART_NAME=$(awk '/^name:/ {print $2}' $2/Chart.yaml)
-    INPUT_REPOSITORY=${{ inputs.helm-gcs-repository }}
-    INPUT_CREDENTIALS=${{ inputs.helm-gcs-credentials }}
+    INPUT_REPOSITORY=$3
+    INPUT_CREDENTIALS=$4
     export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/helm-gcs-key.json
 
     echo ${INPUT_CREDENTIALS:-$HELM_GCS_CREDENTIALS} > ${GOOGLE_APPLICATION_CREDENTIALS}

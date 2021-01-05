@@ -17,3 +17,5 @@ runs:
   args: 
     - publish
     - ${{ inputs.chart-path }}
+    - ${{ inputs.helm-gcs-repository }}
+    - ${{ inputs.helm-gcs-credentials }}
