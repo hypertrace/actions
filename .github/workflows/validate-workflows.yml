@@ -14,10 +14,7 @@ jobs:
       - name: Checkout local repository
         uses: actions/checkout@v2
 
-      - name: Install JSON schema validator
-        run: npm install --global ajv-cli@4.0.1
-
       # See: https://github.com/ajv-validator/ajv-cli/blob/master/README.md
       - name: Validate GitHub Actions workflows
         run: |
-          ajv -s "./.github/schemas/github-action.json" -d "**/*.{yml,yaml}"
+          npx -p ajv-cli@4.0.1 ajv -s "./.github/schemas/github-action.json" -d "**/*.{yml,yaml}"
