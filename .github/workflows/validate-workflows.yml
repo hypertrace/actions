@@ -1,8 +1,36 @@
-name: Yaml Lint
-on: [push]
+name: Validate GitHub Actions Workflows
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/*.ya?ml"
+      - "**/*.ya?ml"
+  push:
+    paths:
+      - ".github/workflows/*.ya?ml"
+      - "**/*.ya?ml"
+  # Scheduled trigger to catch workflow failure resulting from changes to the JSON schema
+  schedule:
+    # run every Saturday at 3 AM UTC
+    - cron: "0 3 * * 6"
+  # See: https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows#workflow_dispatch
+  workflow_dispatch:
+  # See: https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows#repository_dispatch
+  repository_dispatch:
+
 jobs:
-  lintAllTheThings:
+  validate:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v2
-      - uses: nwisbeta/validate-yaml-schema@v1.0
+      - name: Checkout local repository
+        uses: actions/checkout@v2
+
+      - name: Install JSON schema validator
+        run: sudo npm install --global ajv-cli
+
+      # See: https://github.com/ajv-validator/ajv-cli/blob/master/README.md
+      - name: Validate GitHub Actions workflows
+        run: |
+          ajv -s "./.github/schemas/github-action.json" -d "./.github/workflows/*.{yml,yaml}"
+          ajv -s "./.github/schemas/github-action.json" -d "**/*.{yml,yaml}"
