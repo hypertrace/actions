@@ -1,7 +1,7 @@
 FROM ghcr.io/openzipkin/alpine:3.12.1
 
 # Use latest recommended version here
-ARG HELM_VERSION=3.3.0
+ARG HELM_VERSION=3.4.2
 
 WORKDIR /usr/local/bin
 
